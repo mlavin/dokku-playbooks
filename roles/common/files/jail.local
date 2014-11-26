@@ -3,4 +3,4 @@
 enabled = true
 
 [postfix]
-enabled  = false
+enabled  = true

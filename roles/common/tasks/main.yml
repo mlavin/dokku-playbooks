@@ -97,3 +97,22 @@
   tags:
     - security
     - firewall
+
+- name: Install mail server packages
+  sudo: True
+  apt: name=postfix
+  tags:
+    - mail
+
+- name: Start the postfix service
+  sudo: True
+  service: name=postfix state=started enabled=true
+  tags:
+    - mail
+
+- name: Configure auto-upgrades
+  sudo: True
+  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades owner=root mode=0644
+  copy: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades owner=root mode=0644
+  tags:
+    - packages
