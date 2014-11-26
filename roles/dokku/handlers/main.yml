@@ -1,0 +1,6 @@
+---
+# Handlers for dokku notifications
+
+- name: restart docker
+  sudo: true
+  service: name=docker state=restarted

@@ -1,0 +1,4 @@
+# Configure dokku
+- hosts: dokku
+  roles:
+  - dokku

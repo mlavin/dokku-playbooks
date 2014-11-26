@@ -1,0 +1,50 @@
+---
+# Setup dokku-alt on a node
+- name: Docker APT key
+  sudo: true
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+
+- name: Docker repo
+  sudo: true
+  apt_repository: repo='deb https://get.docker.com/ubuntu docker main' state=present
+
+- name: Install Docker
+  sudo: true
+  apt: name=lxc-docker update_cache=yes
+
+- name: Configure Docker
+  sudo: true
+  copy: src=docker.default dest=/etc/default/docker owner=root mode=0644
+  notify: restart docker
+
+- name: Start Docker
+  sudo: true
+  service: name=ssh state=started enabled=true
+
+- name: Dokku APT key
+  sudo: true
+  apt_key: keyserver=keys.gnupg.net id=EAD883AF
+
+- name: Dokku repo
+  sudo: true
+  apt_repository: repo='deb https://dokku-alt.github.io/dokku-alt /' state=present
+
+- name: Install Dokku
+  sudo: true
+  apt: name=dokku-alt update_cache=yes
+
+- name: Dokku hostname
+  sudo: true
+  copy: content={{ dokku_host }} dest=/home/dokku/HOSTNAME owner=root mode=0644
+
+- name: Dokku vhost
+  sudo: true
+  copy: content={{ dokku_vhost }} dest=/home/dokku/VHOST owner=root mode=0644
+
+- name: Allow HTTP
+  sudo: true
+  ufw: rule=allow port=80 proto=tcp
+
+- name: Allow HTTPS
+  sudo: true
+  ufw: rule=allow port=443 proto=tcp
