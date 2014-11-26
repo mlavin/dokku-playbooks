@@ -1,0 +1,71 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install base packages 
+  apt: name={{ item }}
+  with_items:
+   - python-software-properties
+   - dpkg-dev
+   - build-essential
+   - sudo
+   - ntp
+   - vim
+   - wget
+
+- name: Start the ntp service
+  service: name=ntp state=started enabled=true
+
+- name: Install ssh packages 
+  apt: name={{ item }}
+  with_items:
+   - openssh-client
+   - openssh-server
+
+- name: Configure ssh file
+  copy: src=sshd_config dest=/etc/ssh/sshd_config owner=root mode=0644
+  notify: restart ssh
+
+- name: Start the ssh service
+  service: name=ssh state=started enabled=true
+
+- name: Install fail2ban packages 
+  apt: name=fail2ban
+
+- name: Configure fail2ban file
+  copy: src=jail.local dest=/etc/fail2ban/jail.local owner=root mode=0644
+  notify: restart fail2ban
+
+- name: Start the fail2ban service
+  service: name=fail2ban state=started enabled=true
+
+- name: Install ufw packages 
+  apt: name=ufw
+
+- name: Start the ufw service
+  service: name=ufw state=started enabled=true
+
+- name: Enable UFW
+  ufw: state=enabled policy=deny
+
+- name: Allow OpenSSH
+  ufw: rule=allow name=OpenSSH
+
+- name: Add user groups
+  group: name={{ item }} state=present
+  with_items:
+   - admin
+   - login
+
+- name: Enable Sudo
+  service: name=sudo state=started enabled=true
+
+- name: Configure Sudo
+  copy: src=sudo.admin dest=/etc/sudoers.d/admin owner=root mode=0644
+
+- name: Create user
+  user: name=mark groups="admin,login" shell=/bin/bash home=/home/mark
+
+- name: Allow user
+  authorized_key: user=mark key="{{ lookup('file', '/home/mark/.ssh/id_rsa.pub') }}"

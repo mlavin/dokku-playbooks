@@ -1,0 +1,9 @@
+---
+# This playbook bootstraps a fresh server with only a root user
+
+- name: Apply common configuration to all nodes
+  hosts: all
+  remote_user: root
+
+  roles:
+    - common
