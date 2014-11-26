@@ -5,5 +5,24 @@
   hosts: all
   remote_user: root
 
-  roles:
-    - common
+  tasks:
+    - name: Install sudo packages
+      apt: name=sudo
+
+    - name: Add user groups
+      group: name={{ item }} state=present
+      with_items:
+       - admin
+       - login
+
+    - name: Enable Sudo
+      service: name=sudo state=started enabled=true
+
+    - name: Configure Sudo
+      copy: src=files/sudo.admin dest=/etc/sudoers.d/admin owner=root mode=0644
+
+    - name: Create user
+      user: name=mark groups="admin,login" shell=/bin/bash home=/home/mark
+
+    - name: Allow user
+      authorized_key: user=mark key="{{ lookup('file', '/home/mark/.ssh/id_rsa.pub') }}"

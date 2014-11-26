@@ -1,3 +1,8 @@
+# Apply common configuration to all hosts
+- hosts: all
+  roles:
+  - common
+
 # Configure dokku
 - hosts: dokku
   roles:

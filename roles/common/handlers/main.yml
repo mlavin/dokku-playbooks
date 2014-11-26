@@ -2,7 +2,9 @@
 # Handlers for common notifications
 
 - name: restart ssh
+  sudo: True
   service: name=ssh state=restarted
 
 - name: restart fail2ban
+  sudo: True
   service: name=fail2ban state=restarted
