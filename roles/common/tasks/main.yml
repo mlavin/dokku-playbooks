@@ -3,18 +3,23 @@
 - name: Update APT cache
   sudo: True
   apt: update_cache=yes cache_valid_time=3600
+  tags:
+    - packages
 
 - name: Install base packages
   sudo: True
   apt: name={{ item }}
   with_items:
    - python-software-properties
+   - unattended-upgrades
    - dpkg-dev
    - build-essential
    - sudo
    - ntp
    - vim
    - wget
+  tags:
+    - packages
 
 - name: Start the ntp service
   sudo: True
@@ -26,6 +31,9 @@
   with_items:
    - openssh-client
    - openssh-server
+  tags:
+    - security
+    - ssh
 
 - name: Configure ssh file
   sudo: True
@@ -35,33 +43,57 @@
 - name: Start the ssh service
   sudo: True
   service: name=ssh state=started enabled=true
+  tags:
+    - security
+    - ssh
 
 - name: Install fail2ban packages
   sudo: True
   apt: name=fail2ban
+  tags:
+    - security
+    - fail2ban
 
 - name: Configure fail2ban file
   sudo: True
   copy: src=jail.local dest=/etc/fail2ban/jail.local owner=root mode=0644
   copy: src=common.local dest=/etc/fail2ban/filter.d/common.local owner=root mode=0644
   notify: restart fail2ban
+  tags:
+    - security
+    - fail2ban
 
 - name: Start the fail2ban service
   sudo: True
   service: name=fail2ban state=started enabled=true
+  tags:
+    - security
+    - fail2ban
 
 - name: Install ufw packages
   sudo: True
   apt: name=ufw
+  tags:
+    - security
+    - firewall
 
 - name: Start the ufw service
   sudo: True
   service: name=ufw state=started enabled=true
+  tags:
+    - security
+    - firewall
 
 - name: Enable UFW
   sudo: True
   ufw: state=enabled policy=deny
+  tags:
+    - security
+    - firewall
 
 - name: Allow OpenSSH
   sudo: True
   ufw: rule=allow name=OpenSSH
+  tags:
+    - security
+    - firewall
