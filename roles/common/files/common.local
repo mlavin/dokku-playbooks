@@ -1,0 +1,2 @@
+[DEFAULT]
+__bsd_syslog_verbose = (<[^.]+ [^.]+>)
