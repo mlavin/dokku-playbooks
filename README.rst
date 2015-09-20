@@ -2,7 +2,7 @@ Dokku-Alt Server Setup
 ======================
 
 This is a set of `Ansible <http://docs.ansible.com/>`_ playbooks to provision a
-`Dokku-Alt <https://github.com/dokku-alt/dokku-alt>`_ server running for my
+`Dokku <https://github.com/progrium/dokku>`_ server running for my
 own personal PAAS.
 
 These won't work out of the box for provisioning your own server but you
@@ -34,7 +34,7 @@ This will install and configure a few base packages as well as finally Docker
 and Dokku-Alt. To add an admin user for Dokku you need to send the SSH key to
 the ``dokku access:add`` command::
 
-    (dokku-playbooks) $ cat ~/.ssh/id_rsa.pub | ssh 104.171.115.182 sudo dokku access:add
+    (dokku-playbooks) $ cat ~/.ssh/id_rsa.pub | ssh <ip> "sudo sshcommand acl-add dokku [description]"
 
 The tasks are tagged so that only parts of the deployment can be run such as::
 
