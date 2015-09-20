@@ -12,25 +12,6 @@
   tags:
     - docker
 
-- name: Install Docker
-  sudo: true
-  apt: name=lxc-docker update_cache=yes
-  tags:
-    - docker
-
-- name: Configure Docker
-  sudo: true
-  copy: src=docker.default dest=/etc/default/docker owner=root mode=0644
-  notify: restart docker
-  tags:
-    - docker
-
-- name: Start Docker
-  sudo: true
-  service: name=ssh state=started enabled=true
-  tags:
-    - docker
-
 - name: Dokku APT key
   sudo: true
   apt_key: url=https://packagecloud.io/gpg.key
@@ -55,11 +36,30 @@
   tags:
     - dokku
 
-- name: Install Dokku
+- name: Install Herokuish
   sudo: true
-  apt: name=dokku update_cache=yes
+  apt: name=herokuish=0.0.1 update_cache=yes
   tags:
     - dokku
+
+- name: Install Dokku
+  sudo: true
+  apt: name=dokku=0.3.26 update_cache=yes
+  tags:
+    - dokku
+
+- name: Configure Docker
+  sudo: true
+  copy: src=docker.default dest=/etc/default/docker owner=root mode=0644
+  notify: restart docker
+  tags:
+    - docker
+
+- name: Start Docker
+  sudo: true
+  service: name=ssh state=started enabled=true
+  tags:
+    - docker
 
 - name: Allow HTTP
   sudo: true
