@@ -1,4 +1,3 @@
--
 # This playbook contains common plays that will be run on all nodes.
 - name: Update APT cache
   sudo: True
@@ -10,15 +9,17 @@
   sudo: True
   apt: name={{ item }}
   with_items:
-   - python-software-properties
-   - unattended-upgrades
-   - dpkg-dev
-   - build-essential
-   - sudo
-   - ntp
-   - vim
-   - wget
-   - apt-transport-https
+    - python-software-properties
+    - unattended-upgrades
+    - dpkg-dev
+    - debconf
+    - debconf-utils
+    - build-essential
+    - sudo
+    - ntp
+    - vim
+    - wget
+    - apt-transport-https
   tags:
     - packages
 
@@ -30,8 +31,8 @@
   sudo: True
   apt: name={{ item }}
   with_items:
-   - openssh-client
-   - openssh-server
+    - openssh-client
+    - openssh-server
   tags:
     - security
     - ssh
