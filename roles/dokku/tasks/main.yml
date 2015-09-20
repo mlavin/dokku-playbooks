@@ -33,31 +33,31 @@
 
 - name: Dokku APT key
   sudo: true
-  apt_key: keyserver=keys.gnupg.net id=EAD883AF
+  apt_key: url=https://packagecloud.io/gpg.key
   tags:
     - dokku
 
 - name: Dokku repo
   sudo: true
-  apt_repository: repo='deb https://dokku-alt.github.io/dokku-alt /' state=present
+  apt_repository: repo='deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main' state=present
   tags:
     - dokku
 
-- name: Install Dokku
+- name: Dokku options
   sudo: true
-  apt: name=dokku-alt update_cache=yes
+  debconf: name=dokku question='dokku/vhost_enable' value='true' vtype='boolean'
   tags:
     - dokku
 
 - name: Dokku hostname
   sudo: true
-  copy: content={{ dokku_host }} dest=/home/dokku/HOSTNAME owner=root mode=0644
+  debconf: name=dokku question='dokku/hostname' value='{{ dokku_host }}' vtype='string'
   tags:
     - dokku
 
-- name: Dokku vhost
+- name: Install Dokku
   sudo: true
-  copy: content={{ dokku_vhost }} dest=/home/dokku/VHOST owner=root mode=0644
+  apt: name=dokku update_cache=yes
   tags:
     - dokku
 
