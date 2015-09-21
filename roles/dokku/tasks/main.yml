@@ -74,3 +74,11 @@
   tags:
     - security
     - firewall
+
+- name: Postgres plugin install
+  sudo: true
+  git: repo=https://github.com/jeffutter/dokku-postgresql-plugin.git dest=/var/lib/dokku/plugins/postgresql
+  notify: install plugins
+  tags:
+    - dokku
+    - plugin

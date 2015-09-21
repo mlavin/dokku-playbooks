@@ -4,3 +4,7 @@
 - name: restart docker
   sudo: true
   service: name=docker state=restarted
+
+- name: install plugins
+  sudo: true
+  command: dokku plugins-install
