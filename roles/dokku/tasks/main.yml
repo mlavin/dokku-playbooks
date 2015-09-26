@@ -82,3 +82,10 @@
   tags:
     - dokku
     - plugin
+
+- name: Nginx Default
+  sudo: true
+  copy: src=nginx.default dest=/etc/nginx/conf.d/default.conf owner=root mode=0644
+  notify: restart nginx
+  tags:
+    - dokku

@@ -8,3 +8,7 @@
 - name: install plugins
   sudo: true
   command: dokku plugins-install
+
+- name: restart nginx
+  sudo: true
+  service: name=nginx state=restarted
