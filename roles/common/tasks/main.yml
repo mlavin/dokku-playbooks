@@ -115,6 +115,11 @@
 - name: Configure auto-upgrades
   sudo: True
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades owner=root mode=0644
+  tags:
+    - packages
+
+- name: Configure unattended-upgrades
+  sudo: True
   copy: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades owner=root mode=0644
   tags:
     - packages
